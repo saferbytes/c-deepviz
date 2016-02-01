@@ -11,7 +11,6 @@ if (WIN32)
 
 endif()
 
-
 if (WIN32)
     # Force to always compile with W4
     if(CMAKE_C_FLAGS MATCHES "/W[0-4]")
@@ -25,7 +24,6 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_library(c-deepviz SHARED ${SOURCE_FILES})
-#add_library(c-deepviz ${SOURCE_FILES})
 #add_executable(c-deepviz ${SOURCE_FILES} src/sandbox.c src/intel.c src/c-deepviz_private.h)
 
 if (NOT WIN32 AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX))
