@@ -8,7 +8,7 @@
 #include "c-deepviz.h"
 #include "c-deepviz_private.h"
 
-PDEEPVIZ_RESULT EXPORT deepviz_ip_info(	const char* api_key, 
+EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
 										PDEEPVIZ_LIST ipList, 
 										const char* time_delta, 
 										deepviz_bool history){
@@ -143,7 +143,7 @@ PDEEPVIZ_RESULT EXPORT deepviz_ip_info(	const char* api_key,
 }
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_domain_info(	const char* api_key, 
+EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
 											PDEEPVIZ_LIST domain, 
 											const char* time_delta, 
 											deepviz_bool history, 
@@ -305,7 +305,7 @@ PDEEPVIZ_RESULT EXPORT deepviz_domain_info(	const char* api_key,
 }
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_search(	const char* api_key, 
+EXPORT PDEEPVIZ_RESULT deepviz_search(const char* api_key,
 										const char* search_string, 
 										int start_offset, 
 										int elements){
@@ -427,7 +427,7 @@ PDEEPVIZ_RESULT EXPORT deepviz_search(	const char* api_key,
 }
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_advanced_search(	const char* api_key,
+EXPORT PDEEPVIZ_RESULT deepviz_advanced_search(const char* api_key,
 												PDEEPVIZ_LIST sim_hash,
 												PDEEPVIZ_LIST created_files,
 												PDEEPVIZ_LIST imp_hash,

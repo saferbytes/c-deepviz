@@ -9,7 +9,7 @@
 #include "c-deepviz_private.h"
 
 
-void			EXPORT deepviz_result_free(PDEEPVIZ_RESULT result){
+EXPORT void	 deepviz_result_free(PDEEPVIZ_RESULT result){
 
 	if (!result){
 		return;
@@ -25,7 +25,7 @@ void			EXPORT deepviz_result_free(PDEEPVIZ_RESULT result){
 }
 
 
-PDEEPVIZ_LIST	EXPORT deepviz_list_init(size_t maxEntryNumber){
+EXPORT PDEEPVIZ_LIST deepviz_list_init(size_t maxEntryNumber){
 
 	PDEEPVIZ_LIST	list = NULL;
 
@@ -44,7 +44,7 @@ PDEEPVIZ_LIST	EXPORT deepviz_list_init(size_t maxEntryNumber){
 }
 
 
-deepviz_bool	EXPORT deepviz_list_add(PDEEPVIZ_LIST list, 
+EXPORT deepviz_bool deepviz_list_add(PDEEPVIZ_LIST list,
 										const char* newEntry){
 
 	size_t i = 0;
@@ -72,7 +72,7 @@ deepviz_bool	EXPORT deepviz_list_add(PDEEPVIZ_LIST list,
 }
 
 
-void			EXPORT deepviz_list_free(PDEEPVIZ_LIST list){
+EXPORT void deepviz_list_free(PDEEPVIZ_LIST list){
 
 	if (list){
 		free(list);

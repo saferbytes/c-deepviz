@@ -9,7 +9,7 @@
 #include "c-deepviz_private.h"
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_upload_sample(	const char* api_key, 
+EXPORT PDEEPVIZ_RESULT deepviz_upload_sample(	const char* api_key,
 												const char* path){
 
 	PDEEPVIZ_RESULT		result = NULL;
@@ -194,7 +194,7 @@ PDEEPVIZ_RESULT EXPORT deepviz_upload_sample(	const char* api_key,
 }
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_upload_folder(	const char* api_key, 
+EXPORT PDEEPVIZ_RESULT deepviz_upload_folder(	const char* api_key,
 												const char* folder){
 
 	char				*retMsg = NULL;
@@ -352,7 +352,7 @@ PDEEPVIZ_RESULT EXPORT deepviz_upload_folder(	const char* api_key,
 }
 
 
-PDEEPVIZ_RESULT	EXPORT deepviz_sample_download(	const char* md5, 
+EXPORT PDEEPVIZ_RESULT deepviz_sample_download(	const char* md5,
 												const char* api_key, 
 												const char* path){
 
@@ -431,7 +431,7 @@ PDEEPVIZ_RESULT	EXPORT deepviz_sample_download(	const char* md5,
 
 	/* Send HTTP request */
 	bRet = win_sendHTTPrequest( DEEPVIZ_SERVER,
-								URL_DOWNLOAD_REPORT,
+								URL_DOWNLOAD_SAMPLE,
 								8082,	//INTERNET_DEFAULT_HTTPS_PORT,
 								HTTPheader,
 								0, //INTERNET_FLAG_SECURE,
@@ -526,7 +526,7 @@ PDEEPVIZ_RESULT	EXPORT deepviz_sample_download(	const char* md5,
 }
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_sample_result(	const char* md5, 
+EXPORT PDEEPVIZ_RESULT deepviz_sample_result(	const char* md5,
 												const char* api_key){
 
 	PDEEPVIZ_RESULT		result = NULL;
@@ -571,7 +571,7 @@ PDEEPVIZ_RESULT EXPORT deepviz_sample_result(	const char* md5,
 }
 
 
-PDEEPVIZ_RESULT EXPORT deepviz_sample_report(	const char* md5, 
+EXPORT PDEEPVIZ_RESULT deepviz_sample_report(	const char* md5,
 												const char* api_key, 
 												PDEEPVIZ_LIST filters){
 	PDEEPVIZ_RESULT	result = NULL;

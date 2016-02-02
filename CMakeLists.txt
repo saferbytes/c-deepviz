@@ -3,7 +3,7 @@ project(c-deepviz)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.c)
 
-if (WIN32)
+if(MSVC)
     set(CompilerFlags CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE )
     foreach(CompilerFlag ${CompilerFlags})
         string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
@@ -11,7 +11,7 @@ if (WIN32)
 
 endif()
 
-if (WIN32)
+if(MSVC)
     # Force to always compile with W4
     if(CMAKE_C_FLAGS MATCHES "/W[0-4]")
         string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996")
@@ -24,12 +24,13 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_library(c-deepviz SHARED ${SOURCE_FILES})
+#add_library(c-deepviz ${SOURCE_FILES})
 #add_executable(c-deepviz ${SOURCE_FILES} src/sandbox.c src/intel.c src/c-deepviz_private.h)
 
 if (NOT WIN32 AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX))
     target_link_libraries(c-deepviz ${CMAKE_CURRENT_SOURCE_DIR}/external-libs/jansson-2.7/linux/libjansson.a)
 
-    # NOTE: MUST INSTALL LIBCURL-DEV -> apt-get install libcurl4-openssl-dev
+    # NOTE: LIBCURL-DEV must be installed
     FIND_PACKAGE(CURL)
     IF(CURL_FOUND)
         INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})

@@ -23,7 +23,6 @@
     #pragma comment (lib, "wininet.lib")
 
     #define EXPORT __declspec(dllexport)
-    #define IMPORT __declspec(dllimport)
 
 #elif defined(__linux__)
 /*  linux */
@@ -34,11 +33,9 @@
 	#include <curl/curl.h>
 
     #define EXPORT __attribute__((visibility("default")))
-    #define IMPORT
 
 #else
 	#define EXPORT
-	#define IMPORT
 #endif
 
 
@@ -96,43 +93,43 @@ typedef struct _DEEPVIZ_LIST{
 /* ******************** Exported APIs ******************** */
 
 /* Initialize a DEEPVIZ_LIST structure (size = "maxEntryNumber") */
-PDEEPVIZ_LIST	EXPORT deepviz_list_init(size_t maxEntryNumber);
+EXPORT PDEEPVIZ_LIST	deepviz_list_init(size_t maxEntryNumber);
 
 /* Add a new element into a DEEPVIZ_LIST. The list must be initilized before using deepviz_list_init() */
-deepviz_bool	EXPORT deepviz_list_add(PDEEPVIZ_LIST list, const char* newFilter);
+EXPORT deepviz_bool		deepviz_list_add(PDEEPVIZ_LIST list, const char* newFilter);
 
 /* Free the allocated memory for a DEEPVIZ_RESULT */
-void			EXPORT deepviz_result_free(PDEEPVIZ_RESULT result);
+EXPORT void				deepviz_result_free(PDEEPVIZ_RESULT result);
 
 /* Free the allocated memory for a DEEPVIZ_LIST */
-void			EXPORT deepviz_list_free(PDEEPVIZ_LIST list);
+EXPORT void				deepviz_list_free(PDEEPVIZ_LIST list);
 
 /* Sandbox */
 
 /* Upload a sample */
-PDEEPVIZ_RESULT	EXPORT deepviz_upload_sample(
+EXPORT PDEEPVIZ_RESULT	deepviz_upload_sample(
 	const char* api_key, 
 	const char* path);
 
 /* Upload all the files in a folder */
-PDEEPVIZ_RESULT	EXPORT deepviz_upload_folder(
+EXPORT PDEEPVIZ_RESULT	 deepviz_upload_folder(
 	const char* api_key, 
 	const char* folder);
 
 /* Download a sample */
-PDEEPVIZ_RESULT	EXPORT deepviz_sample_download(
+EXPORT PDEEPVIZ_RESULT	 deepviz_sample_download(
 	const char* md5, 
 	const char* api_key, 
 	const char* path);
 
 /* Retrieve the report of a sample according to the given filters */
-PDEEPVIZ_RESULT	EXPORT deepviz_sample_report(
+EXPORT PDEEPVIZ_RESULT	 deepviz_sample_report(
 	const char* md5, 
 	const char* api_key, 
 	PDEEPVIZ_LIST filters);
 
 /* Retrieve the analysis result of a sample */
-PDEEPVIZ_RESULT	EXPORT deepviz_sample_result(
+EXPORT PDEEPVIZ_RESULT	 deepviz_sample_result(
 	const char* md5, 
 	const char* api_key);
 
@@ -141,7 +138,7 @@ PDEEPVIZ_RESULT	EXPORT deepviz_sample_result(
 /* Retrieve intel data about one or more IPs
 OR
    Retrieve the list of IPs analyzed in the last "time_delta" */
-PDEEPVIZ_RESULT	EXPORT deepviz_ip_info(
+EXPORT PDEEPVIZ_RESULT	deepviz_ip_info(
 	const char* api_key, 
 	PDEEPVIZ_LIST ipList, 
 	const char* time_delta, 
@@ -150,7 +147,7 @@ PDEEPVIZ_RESULT	EXPORT deepviz_ip_info(
 /* Retrieve intel data about one or more domains 
 OR
    Retrieve newly registered domains in the last "time_delta" */
-PDEEPVIZ_RESULT	EXPORT deepviz_domain_info(
+EXPORT PDEEPVIZ_RESULT	deepviz_domain_info(
 	const char* api_key, 
 	PDEEPVIZ_LIST domain, 
 	const char* time_delta, 
@@ -158,14 +155,14 @@ PDEEPVIZ_RESULT	EXPORT deepviz_domain_info(
 	PDEEPVIZ_LIST filters);
 
 /* Run generic search based on strings (find all IPs, domains, samples related to the searched keyword) */
-PDEEPVIZ_RESULT	EXPORT deepviz_search(
+EXPORT PDEEPVIZ_RESULT	 deepviz_search(
 	const char* api_key, 
 	const char* search_string, 
 	int start_offset, 
 	int elements);
 
 /* Run advanced search based on parameters (find all MD5 samples connecting to a domain and determined as malicious) */
-PDEEPVIZ_RESULT EXPORT deepviz_advanced_search(
+EXPORT PDEEPVIZ_RESULT  deepviz_advanced_search(
 	const char* api_key,
 	PDEEPVIZ_LIST sim_hash,
 	PDEEPVIZ_LIST created_files,
