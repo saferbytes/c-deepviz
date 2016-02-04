@@ -98,10 +98,10 @@ EXPORT PDEEPVIZ_LIST	deepviz_list_init(size_t maxEntryNumber);
 EXPORT deepviz_bool		deepviz_list_add(PDEEPVIZ_LIST list, const char* newFilter);
 
 /* Free the allocated memory for a DEEPVIZ_RESULT */
-EXPORT void				deepviz_result_free(PDEEPVIZ_RESULT result);
+EXPORT void				deepviz_result_free(PDEEPVIZ_RESULT *result);
 
 /* Free the allocated memory for a DEEPVIZ_LIST */
-EXPORT void				deepviz_list_free(PDEEPVIZ_LIST list);
+EXPORT void				deepviz_list_free(PDEEPVIZ_LIST *list);
 
 /* Sandbox */
 

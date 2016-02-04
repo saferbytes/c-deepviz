@@ -280,13 +280,13 @@ EXPORT PDEEPVIZ_RESULT deepviz_upload_folder(	const char* api_key,
 
 					if (result->status != DEEPVIZ_STATUS_SUCCESS){
 						sprintf_s(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error uploading file \"%s\": %d - %s", currPath, result->status, result->msg);
-						deepviz_result_free(result);
+						deepviz_result_free(&result);
 						FindClose(hFile);
 						free(tmpFolder);
 						return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
 					}
 
-					deepviz_result_free(result);
+					deepviz_result_free(&result);
 				}
 			}
 		}
@@ -330,12 +330,12 @@ EXPORT PDEEPVIZ_RESULT deepviz_upload_folder(	const char* api_key,
 
 					if (result->status != DEEPVIZ_STATUS_SUCCESS){
 						snprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error uploading file \"%s\": %d - %s", currPath, result->status, result->msg);
-						deepviz_result_free(result);
+						deepviz_result_free(&result);
 						closedir(dir);
 						return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
 					}
 
-					deepviz_result_free(result);
+					deepviz_result_free(&result);
 				}
 			}
 		}
@@ -564,7 +564,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_result(	const char* md5,
 	/* Send API request */
 	result = deepviz_sample_report(md5, api_key, list);
 
-	deepviz_list_free(list);
+	deepviz_list_free(&list);
 
 	return result;
 

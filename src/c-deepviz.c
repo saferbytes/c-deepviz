@@ -9,18 +9,18 @@
 #include "c-deepviz_private.h"
 
 
-EXPORT void	 deepviz_result_free(PDEEPVIZ_RESULT result){
+EXPORT void	 deepviz_result_free(PDEEPVIZ_RESULT *result){
 
 	if (!result){
 		return;
 	}
 
-	if (result->msg) 
-		free(result->msg);
+	if ((*result)->msg) 
+		free((*result)->msg);
 
-	free(result);
+	free(*result);
 
-	result = NULL;
+	(*result) = NULL;
 
 }
 
@@ -72,10 +72,11 @@ EXPORT deepviz_bool deepviz_list_add(PDEEPVIZ_LIST list,
 }
 
 
-EXPORT void deepviz_list_free(PDEEPVIZ_LIST list){
+EXPORT void deepviz_list_free(PDEEPVIZ_LIST *list){
 
-	if (list){
-		free(list);
+	if (*list){
+		free(*list);
+		(*list) = NULL;
 	}
 
 }
@@ -103,10 +104,6 @@ int dvz_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap){
 int deepviz_sprintf(char *outBuf, size_t size, const char *format, ...){
 	int			count = -1;
 	va_list		ap;
-
-	if (size <= 0){
-		return count;
-	}
 
 	memset(outBuf, 0, size);
 
@@ -402,9 +399,6 @@ deepviz_bool linux_sendHTTPrequest(	  const char* serverName,
 
 	memset(requestString, 0, 1024);
 
-	data.memory = malloc(1);  	/* will be grown as needed by realloc above */
-	data.size = 0;    			/* no data at this point */
-
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 
 	curl = curl_easy_init();
@@ -413,6 +407,9 @@ deepviz_bool linux_sendHTTPrequest(	  const char* serverName,
 		return deepviz_false;
 	}
 
+	data.memory = malloc(1);  	/* will be grown as needed by realloc above */
+	data.size = 0;    			/* no data at this point */
+	
 	/* Build URL */
 	snprintf(requestString, 1024, "https://%s/%s", serverName, httpPage);
 	curl_easy_setopt(curl, CURLOPT_URL, requestString);
@@ -486,9 +483,6 @@ deepviz_bool linux_sendHTTPrequestMultipart(	const char* serverName,
 
 	memset(requestString, 0, 1024);
 
-	data.memory = malloc(1);  	/* will be grown as needed by realloc above */
-	data.size = 0;    			/* no data at this point */
-
 	curl_global_init(CURL_GLOBAL_ALL);
 
     /* Build multipart form post */
@@ -516,6 +510,9 @@ deepviz_bool linux_sendHTTPrequestMultipart(	const char* serverName,
 		snprintf(errorMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz\n");
 		return deepviz_false;
 	}
+	
+	data.memory = malloc(1);  	/* will be grown as needed by realloc above */
+	data.size = 0;    			/* no data at this point */
 
 	/* Build URL */
     snprintf(requestString, 1024, "https://%s/%s", serverName, httpPage);

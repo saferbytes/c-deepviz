@@ -19,7 +19,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
 	json_t			*jsonIPs = NULL;
 	char			*jsonRequestString = NULL;
 	char			*retMsg = NULL;
-	int				bRet;
+	deepviz_bool	bRet = deepviz_false;
 	size_t			i;
 	char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 #ifdef _WIN32
@@ -125,13 +125,14 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
 
 	free(jsonRequestString);
 
-	if (!bRet){
+	if (bRet == deepviz_false){
 		/* Network Error */
 		if (responseOut) free(responseOut);
 		return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
 	}
 
 	free(retMsg);
+	retMsg = NULL;
 
 	/* Parse API response and build DEEPVIZ_RESULT return value */
 	result = parse_deepviz_response(statusCode, responseOut, responseOutLen);
@@ -157,7 +158,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
 	json_t			*jsonFilters = NULL;
 	char			*jsonRequestString = NULL;
 	char			*retMsg = NULL;
-	int				bRet;
+	deepviz_bool	bRet = deepviz_false;
 	size_t			i;
 	char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 #ifdef _WIN32
@@ -287,13 +288,14 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
 
 	free(jsonRequestString);
 
-	if (!bRet){
+	if (bRet == deepviz_false){
 		/* Network Error */
 		if (responseOut) free(responseOut);
 		return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
 	}
 
 	free(retMsg);
+	retMsg = NULL;
 
 	/* Parse API response and build DEEPVIZ_RESULT return value */
 	result = parse_deepviz_response(statusCode, responseOut, responseOutLen);
@@ -319,7 +321,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_search(const char* api_key,
 	size_t			index;
 	json_t			*value;
 	char			*retMsg = NULL;
-	int				bRet;
+	deepviz_bool	bRet = deepviz_false;
 	char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 	char			tmpStr[100] = {0};
 #ifdef _WIN32
@@ -402,7 +404,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_search(const char* api_key,
 
 	free(jsonRequestString);
 
-	if (!bRet){
+	if (bRet == deepviz_false){
 		/* Network Error */
 		if (responseOut) free(responseOut);
 		return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
@@ -464,7 +466,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_advanced_search(const char* api_key,
 	size_t			index;
 	json_t			*value;
 	char			*retMsg = NULL;
-	int				bRet;
+	deepviz_bool	bRet = deepviz_false;
 	size_t			i;
 	char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 	char			tmpStr[100] = { 0 };
@@ -717,7 +719,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_advanced_search(const char* api_key,
 
 	free(jsonRequestString);
 
-	if (!bRet){
+	if (bRet == deepviz_false){
 		/* Network Error */
 		if (responseOut) free(responseOut);
 		return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);

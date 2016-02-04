@@ -68,7 +68,7 @@ if (result){
 	printf("STATUS: %d - MSG: %s\n", result->status, result->msg);
 }
 
-deepviz_result_free(result);
+deepviz_result_free(&result);
 ```
 
 To upload a folder:
@@ -85,7 +85,7 @@ if (result){
     printf("STATUS: %d - MSG: %s\n", result->status, result->msg);
 }
 
-deepviz_result_free(result);
+deepviz_result_free(&result);
 ```
 
 To download a sample:
@@ -103,7 +103,7 @@ if (result){
 	printf("STATUS: %d - MSG: %s\n", result->status, result->msg);
 }
 
-deepviz_result_free(result);
+deepviz_result_free(&result);
 ```
 
 To retrieve scan result of a specific MD5:
@@ -126,7 +126,7 @@ if (result){
 	}
 }
 
-deepviz_result_free(result);
+deepviz_result_free(&result);
 ```
 
 To retrieve full scan report for a specific MD5:
@@ -149,7 +149,7 @@ if (result){
 	}
 }
 
-deepviz_result_free(result);
+deepviz_result_free(&result);
 ```
 
 To retrieve only specific parts of the report of a specific MD5 scan:
@@ -180,8 +180,8 @@ if (filters){
 		}
 	}
 
-	deepviz_list_free(filters);
-	deepviz_result_free(result);
+	deepviz_list_free(&filters);
+	deepviz_result_free(&result);
 }
 ```
 #### Threat Intelligence
@@ -213,8 +213,8 @@ if (ipList){
 		}
 	}
 
-	deepviz_list_free(ipList);
-	deepviz_result_free(result);
+	deepviz_list_free(&ipList);
+	deepviz_result_free(&result);
 }
 ```
 
@@ -251,9 +251,9 @@ if (domainList && filters){
 		}
 	}
 
-	deepviz_list_free(domainList);
-	deepviz_list_free(filters);
-	deepviz_result_free(result);
+	deepviz_list_free(&domainList);
+	deepviz_list_free(&filters);
+	deepviz_result_free(&result);
 }
 ```
 
@@ -285,8 +285,8 @@ if (filters){
 		}
 	}
 
-	deepviz_list_free(filters);
-	deepviz_result_free(result);
+	deepviz_list_free(&filters);
+	deepviz_result_free(&result);
 }
 ```
 
@@ -314,7 +314,7 @@ if (result){
 	}
 }
 
-deepviz_result_free(result);
+deepviz_result_free(&result);
 ```
 
 To run advanced search based on parameters
@@ -343,7 +343,7 @@ if (domainList){
 		}
 	}
 	
-	deepviz_list_free(domainList);
-	deepviz_result_free(result);
+	deepviz_list_free(&domainList);
+	deepviz_result_free(&result);
 }
 ```
