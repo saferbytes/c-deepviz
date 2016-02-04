@@ -414,8 +414,7 @@ deepviz_bool linux_sendHTTPrequest(	  const char* serverName,
 	}
 
 	/* Build URL */
-	/*snprintf(requestString, 1024, "https://%s/%s", serverName, httpPage);*/
-	snprintf(requestString, 1024, "http://%s:8082/%s", serverName, httpPage);       /* removeme */
+	snprintf(requestString, 1024, "https://%s/%s", serverName, httpPage);
 	curl_easy_setopt(curl, CURLOPT_URL, requestString);
 
 	/* Set HTTP headers */
@@ -519,8 +518,7 @@ deepviz_bool linux_sendHTTPrequestMultipart(	const char* serverName,
 	}
 
 	/* Build URL */
-    /*snprintf(requestString, 1024, "https://%s/%s", serverName, httpPage);*/
-    snprintf(requestString, 1024, "http://%s:8082/%s", serverName, httpPage);       /* removeme */
+    snprintf(requestString, 1024, "https://%s/%s", serverName, httpPage);
 	curl_easy_setopt(curl, CURLOPT_URL, requestString);
 
 	/* Set HTTP headers */

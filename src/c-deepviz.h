@@ -47,8 +47,7 @@ typedef		int					deepviz_bool;
 
 /* DEEPVIZ REST API URLs */
 
-/*#define		DEEPVIZ_SERVER					"api.deepviz.com" */		// TODO restore
-#define		DEEPVIZ_SERVER					"api.dvzlabs.com"
+#define		DEEPVIZ_SERVER					"api.deepviz.com"
 
 #define		URL_DOWNLOAD_REPORT				"general/report"
 #define		URL_UPLOAD_SAMPLE				"sandbox/submit"
