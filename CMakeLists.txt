@@ -23,9 +23,8 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-long-long -Wno-unused-function")
 endif()
 
-add_library(c-deepviz SHARED ${SOURCE_FILES})
-#add_library(c-deepviz ${SOURCE_FILES})
-#add_executable(c-deepviz ${SOURCE_FILES} src/sandbox.c src/intel.c src/c-deepviz_private.h)
+#add_library(c-deepviz SHARED ${SOURCE_FILES})
+add_executable(c-deepviz ${SOURCE_FILES} src/sandbox.c src/intel.c src/c-deepviz_private.h)
 
 if (NOT WIN32 AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX))
     target_link_libraries(c-deepviz ${CMAKE_CURRENT_SOURCE_DIR}/external-libs/jansson-2.7/linux/libjansson.a)
