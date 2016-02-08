@@ -25,7 +25,7 @@ cd build
 cmake ..
 ```
 
-Red Hat / Fedora / CentOS:
+RedHat / Fedora / CentOS:
 
 ```bash
 yum install cmake
@@ -68,7 +68,7 @@ if (result){
 	printf("STATUS: %d - MSG: %s\n", result->status, result->msg);
 }
 
-deepviz_result_free(&result);
+deepviz_result_free(result);
 ```
 
 To upload a folder:
@@ -85,7 +85,7 @@ if (result){
     printf("STATUS: %d - MSG: %s\n", result->status, result->msg);
 }
 
-deepviz_result_free(&result);
+deepviz_result_free(result);
 ```
 
 To download a sample:
@@ -103,7 +103,7 @@ if (result){
 	printf("STATUS: %d - MSG: %s\n", result->status, result->msg);
 }
 
-deepviz_result_free(&result);
+deepviz_result_free(result);
 ```
 
 To retrieve scan result of a specific MD5:
@@ -126,7 +126,7 @@ if (result){
 	}
 }
 
-deepviz_result_free(&result);
+deepviz_result_free(result);
 ```
 
 To retrieve full scan report for a specific MD5:
@@ -149,7 +149,7 @@ if (result){
 	}
 }
 
-deepviz_result_free(&result);
+deepviz_result_free(result);
 ```
 
 To retrieve only specific parts of the report of a specific MD5 scan:
@@ -180,10 +180,52 @@ if (filters){
 		}
 	}
 
-	deepviz_list_free(&filters);
-	deepviz_result_free(&result);
+	deepviz_list_free(filters);
+	deepviz_result_free(result);
 }
 ```
+
+To send a bulk download request and download the related archive containing the requested files:
+
+```C++
+#include "c-deepviz.h"
+
+...
+PDEEPVIZ_RESULT result1 = NULL;
+PDEEPVIZ_RESULT result2 = NULL;
+PDEEPVIZ_LIST	md5List = NULL;
+const char* apikey = "--------------------------your-apikey---------------------------";
+
+md5List = deepviz_list_init(<number_of_md5>);
+if (md5List){
+
+    deepviz_list_add(md5List, "-----------MD5-1----------------");
+    ...
+    deepviz_list_add(md5List, "-----------MD5-n----------------");
+  
+    result1 = deepviz_bulk_download_request(md5List, apikey);
+    if (result1){
+        /* "msg" contains request ID on success */
+        if (result1->status == DEEPVIZ_STATUS_SUCCESS){
+        
+            printf("BULK REQUEST ID: %s\n", result1->msg);
+            result2 = deepviz_bulk_download_retrieve(result1->msg, "<download_path>", apikey);
+            if (result2){
+               printf("STATUS: %d - MSG: %s\n", result2->status, result2->msg);
+            }
+          
+            deepviz_result_free(&result2);
+        }
+        else{
+           printf("ERROR CODE: %d - MSG: %s\n", result1->status, result1->msg);
+        }
+   }
+   
+   deepviz_list_free(&md5List);
+   deepviz_result_free(&result1);
+}
+```
+
 #### Threat Intelligence
 
 To retrieve intel data about one or more IPs:
@@ -213,8 +255,8 @@ if (ipList){
 		}
 	}
 
-	deepviz_list_free(&ipList);
-	deepviz_result_free(&result);
+	deepviz_list_free(ipList);
+	deepviz_result_free(result);
 }
 ```
 
@@ -251,9 +293,9 @@ if (domainList && filters){
 		}
 	}
 
-	deepviz_list_free(&domainList);
-	deepviz_list_free(&filters);
-	deepviz_result_free(&result);
+	deepviz_list_free(domainList);
+	deepviz_list_free(filters);
+	deepviz_result_free(result);
 }
 ```
 
@@ -285,8 +327,8 @@ if (filters){
 		}
 	}
 
-	deepviz_list_free(&filters);
-	deepviz_result_free(&result);
+	deepviz_list_free(filters);
+	deepviz_result_free(result);
 }
 ```
 
@@ -314,7 +356,7 @@ if (result){
 	}
 }
 
-deepviz_result_free(&result);
+deepviz_result_free(result);
 ```
 
 To run advanced search based on parameters
@@ -343,7 +385,7 @@ if (domainList){
 		}
 	}
 	
-	deepviz_list_free(&domainList);
-	deepviz_result_free(&result);
+	deepviz_list_free(domainList);
+	deepviz_result_free(result);
 }
 ```

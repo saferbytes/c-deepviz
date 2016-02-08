@@ -47,8 +47,7 @@ typedef		int					deepviz_bool;
 
 /* DEEPVIZ REST API URLs */
 
-//#define		DEEPVIZ_SERVER                  "api.deepviz.com"
-#define		DEEPVIZ_SERVER                  "api.dvzlabs.com"
+#define		DEEPVIZ_SERVER                  "api.deepviz.com"
 
 #define		URL_DOWNLOAD_REPORT             "general/report"
 #define		URL_UPLOAD_SAMPLE               "sandbox/submit"
@@ -140,7 +139,8 @@ EXPORT PDEEPVIZ_RESULT  deepviz_bulk_download_request(
     PDEEPVIZ_LIST md5_list,
     const char* api_key);
 
-/* Download the archive af a given bulk download request */
+/* Download the archive related to the given request ID. 
+To retrieve a bulk request ID you must use deepviz_bulk_download_request() API before. */
 EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(
     const char* id_request,
     const char* path,

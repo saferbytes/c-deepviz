@@ -697,18 +697,21 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_report(	const char* md5,
 EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_request(   PDEEPVIZ_LIST md5_list,
                                                         const char* api_key){
 
-    PDEEPVIZ_RESULT	result = NULL;
-    void*			responseOut = NULL;
-    size_t			responseOutLen = 0;
-    json_t			*jsonObj = NULL;
-    json_t			*jsonMD5list = NULL;
-    char			*jsonRequestString = NULL;
-    char			*retMsg = NULL;
-    deepviz_bool	bRet = deepviz_false;
-    size_t			i;
-    char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
+    void*			        responseOut = NULL;
+    size_t			        responseOutLen = 0;
+    json_t			        *jsonObj = NULL;
+    json_t			        *jsonMD5list = NULL;
+    json_t			        *jsonData = NULL;
+    json_t			        *jsonID = NULL;
+    json_error_t            jsonError;
+    DEEPVIZ_RESULT_STATUS	currStatus;
+    char			        *jsonRequestString = NULL;
+    char			        *retMsg = NULL;
+    deepviz_bool	        bRet = deepviz_false;
+    size_t			        i;
+    char			        statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 #ifdef _WIN32
-    char			HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
+    char			        HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
 #endif
 
     retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);
@@ -768,9 +771,9 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_request(   PDEEPVIZ_LIST md5_list,
     /* Send HTTP request */
     bRet = win_sendHTTPrequest( DEEPVIZ_SERVER,
                                 URL_REQUEST_BULK,
-                                8082,//INTERNET_DEFAULT_HTTPS_PORT,     removeme fixme
+                                INTERNET_DEFAULT_HTTPS_PORT,
                                 HTTPheader,
-                                0, //INTERNET_FLAG_SECURE,
+                                INTERNET_FLAG_SECURE,
                                 jsonRequestString,
                                 strlen(jsonRequestString),
                                 statusCode,
@@ -801,14 +804,89 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_request(   PDEEPVIZ_LIST md5_list,
         return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
     }
 
-    free(retMsg);
+    if (responseOutLen == 0){
+        /* Empty response */
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "HTTP empty response");
+        return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
+    }
 
-    /* Parse API response and build DEEPVIZ_RESULT return value */
-    result = parse_deepviz_response(statusCode, responseOut, responseOutLen);
+    /* Load response JSON */
+    jsonObj = json_loads((char*)responseOut, responseOutLen, &jsonError);
+
+    /* Check status code */
+    if (strcmp(statusCode, "200")){
+
+        /* Check response JSON */
+        if (!jsonObj){
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz: %s", statusCode);
+            return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+        }
+
+        /* Get "errmsg" string from JSON response */
+        jsonData = json_object_get(jsonObj, "errmsg");
+        if (!jsonData){
+            /* Error parsing HTTP response */
+            json_decref(jsonObj);
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz: %s", statusCode);
+            return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+        }
+
+        if (statusCode[0] == '4'){
+            /* 4XX errors */
+            currStatus = DEEPVIZ_STATUS_CLIENT_ERROR;
+        }
+        else if (statusCode[0] == '5'){
+            /* 5XX errors */
+            currStatus = DEEPVIZ_STATUS_SERVER_ERROR;
+        }
+        else{
+            currStatus = DEEPVIZ_STATUS_INTERNAL_ERROR;
+        }
+
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error: %s - %s", statusCode, json_string_value(jsonData));
+        json_decref(jsonObj);
+
+        return deepviz_result_init(currStatus, retMsg);
+    }
+
+    /* Check response JSON */
+    if (!jsonObj){
+        /* Error parsing HTTP response */
+        if (jsonError.text){
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error parsing HTTP response: %s", jsonError.text);
+        }
+        else{
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error parsing HTTP response");
+        }
+
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+    }
+
+    /* Get response JSON data object */
+    jsonData = json_object_get(jsonObj, "data");
+    if (!jsonData){
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error parsing HTTP response");
+        json_decref(jsonObj);
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+    }
+
+    /* Get id_request object */
+    jsonID = json_object_get(jsonData, "id_request");
+    if (!jsonID){
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error parsing HTTP response");
+        json_decref(jsonObj);
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+    }
+
+    /* Convert "id_request" value to string */
+    deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "%d", json_integer_value(jsonID));
+
+    /* Free response object */
+    json_decref(jsonObj);
 
     if (responseOut) free(responseOut);
 
-    return result;
+    return deepviz_result_init(DEEPVIZ_STATUS_SUCCESS, retMsg);
 
 }
 
@@ -817,7 +895,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
                                                         const char* path,
                                                         const char* api_key){
 
-    PDEEPVIZ_RESULT	result = NULL;
     void*			responseOut = NULL;
     size_t			responseOutLen = 0;
     FILE			*file;
@@ -830,7 +907,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
     char			*jsonRequestString = NULL;
     char			*retMsg = NULL;
     deepviz_bool	bRet = deepviz_false;
-    size_t			i;
     char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 #ifdef _WIN32
     char			HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
@@ -890,6 +966,8 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
     json_decref(jsonObj);
 
     if (!jsonRequestString){
+		free(filePath);
+        fclose(file);
         deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error creating HTTP request");
         return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
     }
@@ -902,9 +980,9 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
     /* Send HTTP request */
     bRet = win_sendHTTPrequest( DEEPVIZ_SERVER,
                                 URL_DOWNLOAD_BULK,
-                                8082,//INTERNET_DEFAULT_HTTPS_PORT,     removeme fixme
+                                INTERNET_DEFAULT_HTTPS_PORT,
                                 HTTPheader,
-                                0, //INTERNET_FLAG_SECURE,
+                                INTERNET_FLAG_SECURE,
                                 jsonRequestString,
                                 strlen(jsonRequestString),
                                 statusCode,
@@ -931,6 +1009,8 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
 
     if (bRet == deepviz_false){
         /* Network Error */
+		free(filePath);
+        fclose(file);
         if (responseOut) free(responseOut);
         return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
     }
