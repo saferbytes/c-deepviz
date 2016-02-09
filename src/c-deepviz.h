@@ -10,7 +10,7 @@
 
 /* ******************** c-deepviz version ******************** */
 
-#define		C_DEEPVIZ_VERSION			"1.0"
+#define		C_DEEPVIZ_VERSION           "1.0"
 #define		C_DEEPVIZ_MAJOR_VERSION		1
 #define		C_DEEPVIZ_MINOR_VERSION		0
 
@@ -41,7 +41,7 @@
 
 /* Data types */
 
-typedef		int					deepviz_bool;
+typedef		int                 deepviz_bool;
 #define		deepviz_true		1
 #define		deepviz_false		0
 
@@ -81,26 +81,26 @@ typedef enum _DEEPVIZ_RESULT_STATUS {
 
 /* c-deepviz result data structure */
 typedef struct _DEEPVIZ_RESULT{
-    DEEPVIZ_RESULT_STATUS	status;
-    char*					msg;
+    DEEPVIZ_RESULT_STATUS   status;
+    char*                   msg;
 }DEEPVIZ_RESULT, *PDEEPVIZ_RESULT;
 
 typedef struct _DEEPVIZ_LIST{
-    size_t		maxEntryNumber;
-    char		entry[1][DEEPVIZ_ENTRY_MAX_LEN];			/* Will be allocated correctly by the deepviz_list_init() API */
+    size_t      maxEntryNumber;
+    char           entry[1][DEEPVIZ_ENTRY_MAX_LEN];			/* Will be allocated correctly by the deepviz_list_init() API */
 }DEEPVIZ_LIST, *PDEEPVIZ_LIST;
 
 
 /* ******************** Exported APIs ******************** */
 
 /* Initialize a DEEPVIZ_LIST structure (size = "maxEntryNumber") */
-EXPORT PDEEPVIZ_LIST	deepviz_list_init(size_t maxEntryNumber);
+EXPORT PDEEPVIZ_LIST    deepviz_list_init(size_t maxEntryNumber);
 
 /* Add a new element into a DEEPVIZ_LIST. The list must be initilized before using deepviz_list_init() */
-EXPORT deepviz_bool		deepviz_list_add(PDEEPVIZ_LIST list, const char* newFilter);
+EXPORT deepviz_bool     deepviz_list_add(PDEEPVIZ_LIST list, const char* newFilter);
 
 /* Free the allocated memory for a DEEPVIZ_RESULT */
-EXPORT void				deepviz_result_free(PDEEPVIZ_RESULT *result);
+EXPORT void             deepviz_result_free(PDEEPVIZ_RESULT *result);
 
 /* Free the allocated memory for a DEEPVIZ_LIST */
 EXPORT void             deepviz_list_free(PDEEPVIZ_LIST *list);
