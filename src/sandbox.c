@@ -28,6 +28,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_upload_sample(	const char* api_key,
     size_t              res;
     char                *request = NULL;
     char                *fileName = NULL;
+    size_t              fileNameLen = 0;
 #endif
 
     retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);
@@ -91,16 +92,23 @@ EXPORT PDEEPVIZ_RESULT deepviz_upload_sample(	const char* api_key,
     memset(request, 0, fileSize + DEEPVIZ_PAYLOAD_MAX_LEN);
 
     /* Get file name from path */
-    fileName = (char*)malloc(strlen(path));
+    fileNameLen = strlen(path) + 1;
+    fileName = (char*)malloc(fileNameLen);
     if (!fileName){
         free(fileBuffer);
         free(request);
         deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Memory allocation error");
         return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
     }
+    
+    memset(fileName, 0, fileNameLen);
 
-    memset(fileName, 0, strlen(path));
-    _splitpath_s(path, NULL, 0, NULL, 0, fileName, strlen(path), NULL, 0);
+    if (!strstr(path, "\\") && !strstr(path, ".")){
+        sprintf_s(fileName, fileNameLen, "%s", path);
+    }
+    else{
+        _splitpath_s(path, NULL, 0, NULL, 0, fileName, fileNameLen, NULL, 0);
+    }
 
     /* Create first part of the HTTP payload */
     sprintf_s(	request,
