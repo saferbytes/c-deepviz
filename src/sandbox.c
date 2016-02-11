@@ -486,7 +486,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_download(	const char* md5,
         jsonObj = json_loads((char*)responseOut, responseOutLen, &jsonError);
         if (!jsonObj){
             if (responseOut) free(responseOut);
-            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz: %s", statusCode);
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error loading Deepviz response: %s", statusCode);
             return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
         }
 
@@ -647,7 +647,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_report(	const char* md5,
     sprintf_s(HTTPheader, DEEPVIZ_HTTP_HEADER_MAX_LEN, "%s\r\n%s\r\n%s\r\n", DEEPVIZ_HTTP_HEADER_CTJ, DEEPVIZ_HTTP_HEADER_A, DEEPVIZ_HTTP_HEADER_AE);
 
     /* Send HTTP request */
-    bRet = win_sendHTTPrequest( DEEPVIZ_SERVER,
+    bRet = win_sendHTTPrequest( DEEPVIZ_SERVER, 
                                 URL_DOWNLOAD_REPORT,
                                 INTERNET_DEFAULT_HTTPS_PORT,
                                 HTTPheader,
@@ -818,7 +818,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_request(   PDEEPVIZ_LIST md5_list,
 
         /* Check response JSON */
         if (!jsonObj){
-            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz: %s", statusCode);
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error loading Deepviz response: %s", statusCode);
             return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
         }
 
@@ -1047,7 +1047,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
         jsonObj = json_loads((char*)responseOut, responseOutLen, &jsonError);
         if (!jsonObj){
             if (responseOut) free(responseOut);
-            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz: %s", statusCode);
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error loading Deepviz response: %s", statusCode);
             return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
         }
 

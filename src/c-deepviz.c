@@ -143,7 +143,7 @@ PDEEPVIZ_RESULT parse_deepviz_response(const char* statusCode, void* response, s
 
         /* Check response JSON */
         if (!jsonObj){
-            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error while connecting to Deepviz: %s", statusCode);
+            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error loading Deepviz response: %s", statusCode);
             return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
         }
 
