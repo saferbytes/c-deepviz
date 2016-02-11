@@ -12,18 +12,18 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
                                         PDEEPVIZ_LIST ipList, 
                                         const char* time_delta, 
                                         deepviz_bool history){
-    PDEEPVIZ_RESULT	result;
-    void*			responseOut = NULL;
-    size_t			responseOutLen = 0;
-    json_t			*jsonObj = NULL;
-    json_t			*jsonIPs = NULL;
-    char			*jsonRequestString = NULL;
-    char			*retMsg = NULL;
-    deepviz_bool	bRet = deepviz_false;
-    size_t			i;
-    char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
+    PDEEPVIZ_RESULT     result;
+    void*               responseOut = NULL;
+    size_t              responseOutLen = 0;
+    json_t              *jsonObj = NULL;
+    json_t              *jsonIPs = NULL;
+    char                *jsonRequestString = NULL;
+    char                *retMsg = NULL;
+    deepviz_bool        bRet = deepviz_false;
+    size_t              i;
+    char                statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 #ifdef _WIN32
-    char			HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
+    char                HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
 #endif
 
     retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);
@@ -112,7 +112,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
 #elif defined(__linux__)
 /* Linux */
 
-    bRet = linux_sendHTTPrequest(	DEEPVIZ_SERVER,
+    bRet = linux_sendHTTPrequest(   DEEPVIZ_SERVER,
                                     URL_INTEL_IP,
                                     jsonRequestString,
                                     statusCode,
@@ -275,7 +275,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
 #elif defined(__linux__)
     /* Linux */
 
-    bRet = linux_sendHTTPrequest(	DEEPVIZ_SERVER,
+    bRet = linux_sendHTTPrequest(   DEEPVIZ_SERVER,
                                     URL_INTEL_DOMAIN,
                                     jsonRequestString,
                                     statusCode,
@@ -391,7 +391,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_search(const char* api_key,
 #elif defined(__linux__)
 /* Linux */
 
-    bRet = linux_sendHTTPrequest(	DEEPVIZ_SERVER,
+    bRet = linux_sendHTTPrequest(   DEEPVIZ_SERVER,
                                     URL_INTEL_SEARCH,
                                     jsonRequestString,
                                     statusCode,
@@ -447,31 +447,31 @@ EXPORT PDEEPVIZ_RESULT deepviz_advanced_search(const char* api_key,
                                                 int start_offset,
                                                 int elements){
     
-    PDEEPVIZ_RESULT	result;
-    void*			responseOut = NULL;
-    size_t			responseOutLen = 0;
-    json_t			*jsonObj = NULL;
-    json_t			*jsonSimHash = NULL;
-    json_t			*jsonCreatedFiles = NULL;
-    json_t			*jsonImpHash = NULL;
-    json_t			*jsonUrl = NULL;
-    json_t			*jsonStrings = NULL;
-    json_t			*jsonIp = NULL;
-    json_t			*jsonAsn = NULL;
-    json_t			*jsonRules = NULL;
-    json_t			*jsonCountry = NULL;
-    json_t			*jsonDomain = NULL;
-    json_t			*jsonSet = NULL;
-    char			*jsonRequestString = NULL;
-    size_t			index;
-    json_t			*value;
-    char			*retMsg = NULL;
-    deepviz_bool	bRet = deepviz_false;
-    size_t			i;
-    char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
-    char			tmpStr[100] = { 0 };
+    PDEEPVIZ_RESULT     result;
+    void*               responseOut = NULL;
+    size_t              responseOutLen = 0;
+    json_t              *jsonObj = NULL;
+    json_t              *jsonSimHash = NULL;
+    json_t              *jsonCreatedFiles = NULL;
+    json_t              *jsonImpHash = NULL;
+    json_t              *jsonUrl = NULL;
+    json_t              *jsonStrings = NULL;
+    json_t              *jsonIp = NULL;
+    json_t              *jsonAsn = NULL;
+    json_t              *jsonRules = NULL;
+    json_t              *jsonCountry = NULL;
+    json_t              *jsonDomain = NULL;
+    json_t              *jsonSet = NULL;
+    char                *jsonRequestString = NULL;
+    size_t              index;
+    json_t              *value;
+    char                *retMsg = NULL;
+    deepviz_bool        bRet = deepviz_false;
+    size_t              i;
+    char                statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
+    char                tmpStr[100] = { 0 };
 #ifdef _WIN32
-    char			HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
+    char                HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
 #endif
 
     retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);

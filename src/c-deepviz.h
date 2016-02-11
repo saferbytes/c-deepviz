@@ -10,9 +10,10 @@
 
 /* ******************** c-deepviz version ******************** */
 
-#define		C_DEEPVIZ_VERSION           "1.0"
-#define		C_DEEPVIZ_MAJOR_VERSION		1
-#define		C_DEEPVIZ_MINOR_VERSION		0
+#define		C_DEEPVIZ_VERSION           "1.0.1"
+#define		C_DEEPVIZ_MAJOR_VERSION     1
+#define		C_DEEPVIZ_MINOR_VERSION     0
+#define		C_DEEPVIZ_PATCH_VERSION     1
 
 
 #ifdef _WIN32
@@ -41,9 +42,9 @@
 
 /* Data types */
 
-typedef		int                 deepviz_bool;
-#define		deepviz_true		1
-#define		deepviz_false		0
+typedef		int                             deepviz_bool;
+#define		deepviz_true                    1
+#define		deepviz_false                   0
 
 /* DEEPVIZ REST API URLs */
 
@@ -67,7 +68,7 @@ extern "C" {
 
 /* ******************** Data structures ******************** */
 
-#define     DEEPVIZ_ENTRY_MAX_LEN		256
+#define     DEEPVIZ_ENTRY_MAX_LEN           256
 
 /* c-deepviz result status codes */
 typedef enum _DEEPVIZ_RESULT_STATUS {
@@ -77,6 +78,7 @@ typedef enum _DEEPVIZ_RESULT_STATUS {
     DEEPVIZ_STATUS_CLIENT_ERROR,
     DEEPVIZ_STATUS_SERVER_ERROR,
     DEEPVIZ_STATUS_INTERNAL_ERROR,
+    DEEPVIZ_STATUS_PROCESSING,
 } DEEPVIZ_RESULT_STATUS;
 
 /* c-deepviz result data structure */
@@ -87,7 +89,7 @@ typedef struct _DEEPVIZ_RESULT{
 
 typedef struct _DEEPVIZ_LIST{
     size_t      maxEntryNumber;
-    char           entry[1][DEEPVIZ_ENTRY_MAX_LEN];			/* Will be allocated correctly by the deepviz_list_init() API */
+    char        entry[1][DEEPVIZ_ENTRY_MAX_LEN];			/* Will be allocated correctly by the deepviz_list_init() API */
 }DEEPVIZ_LIST, *PDEEPVIZ_LIST;
 
 
