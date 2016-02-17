@@ -6,6 +6,15 @@ c-deepviz is a C library wrapper for deepviz.com REST APIs
 - Windows
 - Linux
 
+## Usage 
+
+To use Deepviz API SDK you will need an API key. You can get it by
+subscribing the service for free at https://account.deepviz.com/register/
+
+You can download the latest release of the precompiled binaries from https://github.com/saferbytes/c-deepviz/releases or you can also recompile from sources as well. Make sure you always download the latest release's sources.
+
+The complete Deepviz REST APIs documentation can be found at https://api.deepviz.com/docs/
+
 ## How to build
 
 C-deepviz can be built using CMake (https://cmake.org/). Create a build directory for an out-of-tree build and run cmake (or ccmake, cmake-gui, or similar) to configure the project.
@@ -44,11 +53,6 @@ md build
 cd build
 cmake ..
 ```
-
-## Usage 
-
-To use Deepviz API SDK you will need an API key. You can get it by
-subscribing the service for free at https://account.deepviz.com/register/
 
 ## SDK API examples
 
