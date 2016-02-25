@@ -10,10 +10,10 @@
 
 /* ******************** c-deepviz version ******************** */
 
-#define		C_DEEPVIZ_VERSION           "1.0.2"
+#define		C_DEEPVIZ_VERSION           "1.0.3"
 #define		C_DEEPVIZ_MAJOR_VERSION     1
 #define		C_DEEPVIZ_MINOR_VERSION     0
-#define		C_DEEPVIZ_PATCH_VERSION     2
+#define		C_DEEPVIZ_PATCH_VERSION     3
 
 
 #ifdef _WIN32
