@@ -364,19 +364,19 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_download(	const char* md5,
                                                 const char* api_key, 
                                                 const char* path){
 
-    void*				responseOut;
-    char				statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
-    size_t				responseOutLen = 0;
-    char				*retMsg = NULL;
-    FILE				*file;
-    char*				filePath = NULL;
-    json_t				*jsonObj = NULL;
-    json_t				*jsonData = NULL;
-    json_error_t		jsonError;
-    char				*jsonRequestString = NULL;
-    deepviz_bool		bRet = deepviz_false;
+    void*               responseOut;
+    char                statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
+    size_t              responseOutLen = 0;
+    char                *retMsg = NULL;
+    FILE                *file;
+    char*               filePath = NULL;
+    json_t              *jsonObj = NULL;
+    json_t              *jsonData = NULL;
+    json_error_t        jsonError;
+    char                *jsonRequestString = NULL;
+    deepviz_bool        bRet = deepviz_false;
 #ifdef _WIN32
-    char				HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
+    char                HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
 #endif
 
     retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);

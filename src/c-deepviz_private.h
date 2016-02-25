@@ -34,28 +34,28 @@
 
 //#define		DEEPVIZ_USER_AGENT			"Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko"
 
-#define		DEEPVIZ_HTTP_HEADER_CTJ		"Content-Type: application/json"
-#define		DEEPVIZ_HTTP_HEADER_CTM		"Content-Type: multipart/form-data"
-#define		DEEPVIZ_HTTP_HEADER_A		"Accept: */*"
-#define		DEEPVIZ_HTTP_HEADER_AE		"Accept-Encoding : gzip, deflate"
+#define     DEEPVIZ_HTTP_HEADER_CTJ         "Content-Type: application/json"
+#define     DEEPVIZ_HTTP_HEADER_CTM         "Content-Type: multipart/form-data"
+#define     DEEPVIZ_HTTP_HEADER_A           "Accept: */*"
+#define     DEEPVIZ_HTTP_HEADER_AE          "Accept-Encoding: gzip, deflate"
 
-#define		DEEPVIZ_BOUNDARY			"----WebKitFormBoundary5YdJYkfUfp3wEFnh"
+#define     DEEPVIZ_BOUNDARY                "----WebKitFormBoundary5YdJYkfUfp3wEFnh"
 
-#define		DEEPVIZ_FILEPATH_MAX_LEN	512
-#define		DEEPVIZ_PAYLOAD_MAX_LEN		512
-#define     DEEPVIZ_ERROR_MAX_LEN      	512
-#define		DEEPVIZ_HTTP_HEADER_MAX_LEN	256
-#define		DEEPVIZ_STATUS_CODE_MAX_LEN 100
+#define		DEEPVIZ_FILEPATH_MAX_LEN        512
+#define     DEEPVIZ_PAYLOAD_MAX_LEN         512
+#define     DEEPVIZ_ERROR_MAX_LEN           512
+#define		DEEPVIZ_HTTP_HEADER_MAX_LEN     256
+#define		DEEPVIZ_STATUS_CODE_MAX_LEN     100
 
-#define     DEEPVIZ_MULTIPART_SOURCE	"c_deepviz"
+#define     DEEPVIZ_MULTIPART_SOURCE        "c_deepviz"
 
 
 /* ============================ private functions ============================ */
 
-int					dvz_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap);
-int					deepviz_sprintf(char *outBuf, size_t size, const char *format, ...);
-PDEEPVIZ_RESULT		deepviz_result_init(DEEPVIZ_RESULT_STATUS status, char* msg);
-PDEEPVIZ_RESULT		parse_deepviz_response(const char* statusCode, void* response, size_t responseLen);
+int                 dvz_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap);
+int                 deepviz_sprintf(char *outBuf, size_t size, const char *format, ...);
+PDEEPVIZ_RESULT     deepviz_result_init(DEEPVIZ_RESULT_STATUS status, char* msg);
+PDEEPVIZ_RESULT     parse_deepviz_response(const char* statusCode, void* response, size_t responseLen);
 
 
 #if defined(_WIN32)

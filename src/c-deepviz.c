@@ -241,14 +241,14 @@ deepviz_bool	win_sendHTTPrequest(const char* httpServerName,
                                     size_t *responseOutLen,
                                     char* errorMsg){
 
-    HINTERNET		hOpen = NULL;
-    HINTERNET		hConnect = NULL;
-    HINTERNET		hRequest = NULL;
-    DWORD			numberOfBytes = 512;
-    BYTE			data[512];
+    HINTERNET       hOpen = NULL;
+    HINTERNET       hConnect = NULL;
+    HINTERNET       hRequest = NULL;
+    DWORD           numberOfBytes = 512;
+    BYTE            data[512];
     PVOID			tmpData = NULL;
-    BOOL			decoding = TRUE;
-    DWORD			rec_timeout = 3600000;
+    BOOL            decoding = TRUE;
+    DWORD           rec_timeout = 3600000;
 
     hOpen = InternetOpenA(NULL, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (hOpen == NULL){
