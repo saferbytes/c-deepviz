@@ -129,6 +129,13 @@ PDEEPVIZ_RESULT parse_deepviz_response(const char* statusCode, void* response, s
         return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, NULL);
     }
 
+    /* Check for processing requests */
+    if (!strcmp(statusCode, "428")){
+        /* Processing */
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Status: %s - Analysis is running", statusCode);
+        return deepviz_result_init(DEEPVIZ_STATUS_PROCESSING, retMsg);
+    }
+
     if (responseLen == 0){
         /* Empty response */
         deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "HTTP empty response");

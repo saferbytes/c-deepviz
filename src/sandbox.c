@@ -1027,7 +1027,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
     /* Check for processing requests */
     if (!strcmp(statusCode, "428")){
         /* Processing */
-        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error: %s - Your request is being processed. Please try again in a few minutes", statusCode);
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Status: %s - Your request is being processed. Please try again in a few minutes", statusCode);
         json_decref(jsonObj);
         free(filePath);
         fclose(file);
