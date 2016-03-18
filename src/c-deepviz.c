@@ -425,7 +425,7 @@ deepviz_bool linux_sendHTTPrequest(	  const char* serverName,
     chunk = curl_slist_append(chunk, "Accept:");
     chunk = curl_slist_append(chunk, DEEPVIZ_HTTP_HEADER_CTJ);
     chunk = curl_slist_append(chunk, DEEPVIZ_HTTP_HEADER_A);
-    chunk = curl_slist_append(chunk, DEEPVIZ_HTTP_HEADER_AE);
+    curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
 
     /* Save Response data buffer */
