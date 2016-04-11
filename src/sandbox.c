@@ -623,7 +623,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_report(	const char* md5,
             }
         }
         if (json_array_size(jsonFilters) == 0){
-            json_decref(jsonFilters);
             deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more output filters in a list. Please try again!");
             return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
         }
@@ -641,7 +640,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_report(	const char* md5,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    json_decref(jsonFilters);
     json_decref(jsonObj);
 
     if (!jsonRequestString){
@@ -750,7 +748,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_request(   PDEEPVIZ_LIST md5_list,
     }
 
     if (json_array_size(jsonMD5list) == 0){
-        json_decref(jsonMD5list);
         deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more output filters in a list. Please try again!");
         return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
     }
@@ -763,7 +760,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_request(   PDEEPVIZ_LIST md5_list,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    json_decref(jsonMD5list);
     json_decref(jsonObj);
 
     if (!jsonRequestString){
@@ -909,7 +905,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
     char*			        filePath = NULL;
     size_t                  filePathLen = 0;
     json_t			        *jsonObj = NULL;
-    json_t			        *jsonMD5list = NULL;
     json_t			        *jsonData = NULL;
     json_error_t	        jsonError;
     DEEPVIZ_RESULT_STATUS	currStatus;
@@ -971,7 +966,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(  const char* id_request,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    json_decref(jsonMD5list);
     json_decref(jsonObj);
 
     if (!jsonRequestString){

@@ -60,7 +60,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
         }
 
         if (json_array_size(jsonIPs) == 0){
-            json_decref(jsonIPs);
             deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more IPs. Please try again!");
             return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
         }
@@ -82,7 +81,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    if (jsonIPs) json_decref(jsonIPs);
     json_decref(jsonObj);
 
     if (!jsonRequestString){
@@ -197,7 +195,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
             }
         }
         if (json_array_size(jsonFilters) == 0){
-            json_decref(jsonFilters);
             deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more output filters in a list. Please try again!");
             return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
         }
@@ -215,8 +212,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
         }
 
         if (json_array_size(jsonDomains) == 0){
-            json_decref(jsonDomains);
-            json_decref(jsonFilters);
             deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more domains. Please try again!");
             return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
         }
@@ -244,8 +239,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    if (jsonDomains) json_decref(jsonDomains);
-    json_decref(jsonFilters);
     json_decref(jsonObj);
 
     if (!jsonRequestString){
@@ -318,8 +311,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_search(const char* api_key,
     json_t			*jsonObj = NULL;
     json_t			*jsonSet = NULL;
     char			*jsonRequestString = NULL;
-    size_t			index;
-    json_t			*value;
     char			*retMsg = NULL;
     deepviz_bool	bRet = deepviz_false;
     char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
@@ -360,8 +351,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_search(const char* api_key,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    json_array_foreach(jsonSet, index, value){	json_decref(value);	}
-    json_decref(jsonSet);
     json_decref(jsonObj);
 
     if (!jsonRequestString){
@@ -463,8 +452,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_advanced_search(const char* api_key,
     json_t              *jsonDomain = NULL;
     json_t              *jsonSet = NULL;
     char                *jsonRequestString = NULL;
-    size_t              index;
-    json_t              *value;
     char                *retMsg = NULL;
     deepviz_bool        bRet = deepviz_false;
     size_t              i;
@@ -665,18 +652,6 @@ EXPORT PDEEPVIZ_RESULT deepviz_advanced_search(const char* api_key,
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
 
-    json_array_foreach(jsonSet, index, value){	json_decref(value); }
-    json_decref(jsonSet);
-    json_decref(jsonSimHash);
-    json_decref(jsonCreatedFiles);
-    json_decref(jsonImpHash);
-    json_decref(jsonUrl);
-    json_decref(jsonStrings);
-    json_decref(jsonIp);
-    json_decref(jsonAsn);
-    json_decref(jsonRules);
-    json_decref(jsonCountry);
-    json_decref(jsonDomain);
     json_decref(jsonObj);
 
     if (!jsonRequestString){
