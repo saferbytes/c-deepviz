@@ -144,7 +144,7 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_info(	const char* md5,
     /* Linux */
 
     bRet = linux_sendHTTPrequest(	DEEPVIZ_SERVER,
-                                    URL_DOWNLOAD_REPORT,
+                                    URL_INTEL_REPORT,
                                     jsonRequestString,
                                     statusCode,
                                     DEEPVIZ_STATUS_CODE_MAX_LEN,
