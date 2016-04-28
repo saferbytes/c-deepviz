@@ -8,6 +8,172 @@
 #include "c-deepviz.h"
 #include "c-deepviz_private.h"
 
+EXPORT PDEEPVIZ_RESULT deepviz_sample_result(	const char* md5,
+                                                const char* api_key){
+
+    PDEEPVIZ_RESULT		result = NULL;
+    char				*retMsg = NULL;
+    PDEEPVIZ_LIST		list = NULL;
+
+    retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);
+    if (!retMsg){
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, NULL);
+    }
+
+#if !defined(_WIN32) && !defined(__linux__)
+    /* TODO */
+    sprintf(retMsg, "Platform not supported");
+    return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+#endif
+
+    if (!md5 || !api_key){
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Invalid or missing parameters. Please try again!");
+        return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
+    }
+
+    /* Init filter struct */
+    list = deepviz_list_init(1);
+    if (!list){
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Internal Error");
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+    }
+
+    free(retMsg);
+
+    /* Set "classification" filter */
+    deepviz_list_add(list, "classification");
+
+    /* Send API request */
+    result = deepviz_sample_info(md5, api_key, list);
+
+    deepviz_list_free(&list);
+
+    return result;
+
+}
+
+
+EXPORT PDEEPVIZ_RESULT deepviz_sample_info(	const char* md5,
+                                            const char* api_key, 
+                                            PDEEPVIZ_LIST filters){
+    PDEEPVIZ_RESULT	result = NULL;
+    void*			responseOut = NULL;
+    size_t			responseOutLen = 0;
+    json_t			*jsonObj = NULL;
+    json_t			*jsonFilters = NULL;
+    char			*jsonRequestString = NULL;
+    char			*retMsg = NULL;
+    deepviz_bool	bRet = deepviz_false;
+    size_t			i;
+    char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
+#ifdef _WIN32
+    char			HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
+#endif
+
+    retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);
+    if (!retMsg){
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, NULL);
+    }
+
+#if !defined(_WIN32) && !defined(__linux__)
+    /* TODO */
+    sprintf(retMsg, "Platform not supported");
+    return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+#endif
+
+	if (!md5 || !api_key || !filters){
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Invalid or missing parameters. Please try again!");
+        return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
+    }
+
+    /* Build SAMPLE REPORT json request */
+
+    /* Build filter JSON array (if any) */
+
+	jsonFilters = json_array();
+	for (i = 0; i < filters->maxEntryNumber; i++){
+		if (filters->entry[i][0]){
+			json_array_append_new(jsonFilters, json_string(filters->entry[i]));
+		}
+	}
+	// Check the given number of filters
+	if (json_array_size(jsonFilters) == 0){
+		deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more output filters in a list. Please try again!");
+		return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
+	}
+	if (json_array_size(jsonFilters) > DEEPVIZ_MAX_FILTERS){
+		deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Parameter 'filters' takes at most %d value(s) (%d given).", DEEPVIZ_MAX_FILTERS, json_array_size(jsonFilters));
+		return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
+	}
+
+    jsonObj = json_pack("{ssssso}",
+                        "api_key", api_key,
+                        "md5", md5,
+						"output_filters", jsonFilters);
+
+    /* Dump JSON string */
+    jsonRequestString = json_dumps(jsonObj, 0);
+
+    json_decref(jsonObj);
+
+    if (!jsonRequestString){
+        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Error creating HTTP request");
+        return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
+    }
+
+#ifdef _WIN32
+    /* Windows */
+
+    sprintf_s(HTTPheader, DEEPVIZ_HTTP_HEADER_MAX_LEN, "%s\r\n%s\r\n%s\r\n", DEEPVIZ_HTTP_HEADER_CTJ, DEEPVIZ_HTTP_HEADER_A, DEEPVIZ_HTTP_HEADER_AE);
+
+    /* Send HTTP request */
+    bRet = win_sendHTTPrequest( DEEPVIZ_SERVER, 
+                                URL_INTEL_REPORT,
+                                INTERNET_DEFAULT_HTTPS_PORT,
+                                HTTPheader,
+                                INTERNET_FLAG_SECURE,
+                                jsonRequestString,
+                                strlen(jsonRequestString),
+                                statusCode,
+                                DEEPVIZ_STATUS_CODE_MAX_LEN,
+                                &responseOut,
+                                &responseOutLen,
+                                retMsg);
+
+#elif defined(__linux__)
+    /* Linux */
+
+    bRet = linux_sendHTTPrequest(	DEEPVIZ_SERVER,
+                                    URL_DOWNLOAD_REPORT,
+                                    jsonRequestString,
+                                    statusCode,
+                                    DEEPVIZ_STATUS_CODE_MAX_LEN,
+                                    &responseOut,
+                                    &responseOutLen,
+                                    retMsg);
+
+#endif
+
+    free(jsonRequestString);
+
+    if (bRet == deepviz_false){
+        /* Network Error */
+        if (responseOut) free(responseOut);
+        return deepviz_result_init(DEEPVIZ_STATUS_NETWORK_ERROR, retMsg);
+    }
+
+    free(retMsg);
+
+    /* Parse API response and build DEEPVIZ_RESULT return value */
+    result = parse_deepviz_response(statusCode, responseOut, responseOutLen);
+
+    if (responseOut) free(responseOut);
+
+    return result;
+
+}
+
+
 EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
                                         PDEEPVIZ_LIST ipList, 
                                         const char* time_delta, 

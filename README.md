@@ -110,29 +110,6 @@ if (result){
 deepviz_result_free(result);
 ```
 
-To retrieve scan result of a specific MD5:
-
-```C++
-#include "c-deepviz.h"
-
-...
-PDEEPVIZ_RESULT result = NULL;
-const char* md5 = "-----------file-md5-------------";
-const char* apikey = "--------------------------your-apikey---------------------------";
-
-result = deepviz_sample_result(md5, apikey);
-if (result){
-    if (result->status == DEEPVIZ_STATUS_SUCCESS){
-        printf("JSON RESULT: %s\n", result->msg);
-    }
-    else{
-        printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
-    }
-}
-
-deepviz_result_free(result);
-```
-
 To retrieve full scan report for a specific MD5:
 
 ```C++
@@ -143,7 +120,7 @@ PDEEPVIZ_RESULT result = NULL;
 const char* md5 = "-----------file-md5-------------";
 const char* apikey = "--------------------------your-apikey---------------------------";
 
-result = deepviz_sample_report(md5, apikey, NULL);
+result = deepviz_sample_report(md5, apikey);
 if (result){
     if (result->status == DEEPVIZ_STATUS_SUCCESS){
         printf("JSON RESULT: %s\n", result->msg);
@@ -154,39 +131,6 @@ if (result){
 }
 
 deepviz_result_free(result);
-```
-
-To retrieve only specific parts of the report of a specific MD5 scan:
-
-```C++
-#include "c-deepviz.h"
-
-...
-PDEEPVIZ_RESULT result = NULL;
-PDEEPVIZ_LIST    filters = NULL;
-const char* md5 = "-----------file-md5-------------";
-const char* apikey = "--------------------------your-apikey---------------------------";
-
-filters = deepviz_list_init(<number_of_filters>);
-if (filters){
-
-    deepviz_list_add(filters, "<deepviz_filter_1>");
-    ...
-    deepviz_list_add(filters, "<deepviz_filter_n>");
-
-    result = deepviz_sample_report(md5, apikey, filters);
-    if (result){
-        if (result->status == DEEPVIZ_STATUS_SUCCESS){
-            printf("JSON RESULT: %s\n", result->msg);
-        }
-        else{
-            printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
-        }
-    }
-
-    deepviz_list_free(filters);
-    deepviz_result_free(result);
-}
 ```
 
 To send a bulk download request and download the related archive containing the requested files:
@@ -241,6 +185,62 @@ if (md5List){
 ```
 
 #### Threat Intelligence
+
+To retrieve scan result of a specific MD5:
+
+```C++
+#include "c-deepviz.h"
+
+...
+PDEEPVIZ_RESULT result = NULL;
+const char* md5 = "-----------file-md5-------------";
+const char* apikey = "--------------------------your-apikey---------------------------";
+
+result = deepviz_sample_result(md5, apikey);
+if (result){
+    if (result->status == DEEPVIZ_STATUS_SUCCESS){
+        printf("JSON RESULT: %s\n", result->msg);
+    }
+    else{
+        printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
+    }
+}
+
+deepviz_result_free(result);
+```
+
+To retrieve only specific parts of the report of a specific MD5 scan:
+
+```C++
+#include "c-deepviz.h"
+
+...
+PDEEPVIZ_RESULT result = NULL;
+PDEEPVIZ_LIST    filters = NULL;
+const char* md5 = "-----------file-md5-------------";
+const char* apikey = "--------------------------your-apikey---------------------------";
+
+filters = deepviz_list_init(<number_of_filters>);
+if (filters){
+
+    deepviz_list_add(filters, "<deepviz_filter_1>");
+    ...
+    deepviz_list_add(filters, "<deepviz_filter_n>");
+
+    result = deepviz_sample_info(md5, apikey, filters);
+    if (result){
+        if (result->status == DEEPVIZ_STATUS_SUCCESS){
+            printf("JSON RESULT: %s\n", result->msg);
+        }
+        else{
+            printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
+        }
+    }
+
+    deepviz_list_free(filters);
+    deepviz_result_free(result);
+}
+```
 
 To retrieve intel data about one or more IPs:
 

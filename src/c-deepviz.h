@@ -10,10 +10,10 @@
 
 /* ******************** c-deepviz version ******************** */
 
-#define		C_DEEPVIZ_VERSION           "1.0.6"
+#define		C_DEEPVIZ_VERSION           "1.1.0"
 #define		C_DEEPVIZ_MAJOR_VERSION     1
-#define		C_DEEPVIZ_MINOR_VERSION     0
-#define		C_DEEPVIZ_PATCH_VERSION     6
+#define		C_DEEPVIZ_MINOR_VERSION     1
+#define		C_DEEPVIZ_PATCH_VERSION     0
 
 
 #ifdef _WIN32
@@ -50,12 +50,13 @@ typedef		int                             deepviz_bool;
 
 #define		DEEPVIZ_SERVER                  "api.deepviz.com"
 
-#define		URL_DOWNLOAD_REPORT             "general/report"
+#define		URL_SAMPLE_REPORT				"general/report"
 #define		URL_UPLOAD_SAMPLE               "sandbox/submit"
 #define		URL_DOWNLOAD_SAMPLE             "sandbox/sample"
 #define		URL_DOWNLOAD_BULK               "sandbox/sample/bulk/retrieve"
 #define		URL_REQUEST_BULK                "sandbox/sample/bulk/request"
 
+#define		URL_INTEL_REPORT				"intel/report"
 #define		URL_INTEL_IP                    "intel/network/ip"
 #define		URL_INTEL_DOMAIN                "intel/network/domain"
 #define		URL_INTEL_SEARCH                "intel/search"
@@ -65,6 +66,7 @@ typedef		int                             deepviz_bool;
 extern "C" {
 #endif
 
+#define		DEEPVIZ_MAX_FILTERS				10
 
 /* ******************** Data structures ******************** */
 
@@ -109,6 +111,11 @@ EXPORT void             deepviz_list_free(PDEEPVIZ_LIST *list);
 
 /* Sandbox */
 
+/* Retrieve the full report of a sample */
+EXPORT PDEEPVIZ_RESULT	deepviz_sample_report(
+	const char* md5,
+	const char* api_key);
+
 /* Upload a sample */
 EXPORT PDEEPVIZ_RESULT  deepviz_upload_sample(
     const char* api_key, 
@@ -125,17 +132,6 @@ EXPORT PDEEPVIZ_RESULT  deepviz_sample_download(
     const char* api_key, 
     const char* path);
 
-/* Retrieve the report of a sample according to the given filters */
-EXPORT PDEEPVIZ_RESULT  deepviz_sample_report(
-    const char* md5, 
-    const char* api_key, 
-    PDEEPVIZ_LIST filters);
-
-/* Retrieve the analysis result of a sample */
-EXPORT PDEEPVIZ_RESULT  deepviz_sample_result(
-    const char* md5, 
-    const char* api_key);
-
 /* Send a bulk download request and retrieve the related request ID */
 EXPORT PDEEPVIZ_RESULT  deepviz_bulk_download_request(   
     PDEEPVIZ_LIST md5_list,
@@ -149,6 +145,17 @@ EXPORT PDEEPVIZ_RESULT deepviz_bulk_download_retrieve(
     const char* api_key);
 
 /* Threat Intelligence */
+
+/* Retrieve the analysis result of a sample */
+EXPORT PDEEPVIZ_RESULT  deepviz_sample_result(
+	const char* md5,
+	const char* api_key);
+
+/* Retrieve the report of a sample according to the given filters */
+EXPORT PDEEPVIZ_RESULT  deepviz_sample_info(
+	const char* md5,
+	const char* api_key,
+	PDEEPVIZ_LIST filters);
 
 /* Retrieve intel data about one or more IPs
 OR
