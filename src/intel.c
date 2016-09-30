@@ -174,15 +174,14 @@ EXPORT PDEEPVIZ_RESULT deepviz_sample_info(	const char* md5,
 }
 
 
-EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
-                                        PDEEPVIZ_LIST ipList, 
-                                        const char* time_delta, 
-                                        deepviz_bool history){
+EXPORT PDEEPVIZ_RESULT deepviz_ip_info( const char* api_key,
+										const char* ip, 
+                                        PDEEPVIZ_LIST filters){
     PDEEPVIZ_RESULT     result;
     void*               responseOut = NULL;
     size_t              responseOutLen = 0;
     json_t              *jsonObj = NULL;
-    json_t              *jsonIPs = NULL;
+	json_t              *jsonFilters = NULL;
     char                *jsonRequestString = NULL;
     char                *retMsg = NULL;
     deepviz_bool        bRet = deepviz_false;
@@ -203,46 +202,33 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
     return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
 #endif
 
-    if (!api_key || (!ipList && !time_delta)){
+    if (!api_key || !ip ){
         deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Invalid or missing parameters. Please try again!");
         return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
     }
 
-    if (ipList && time_delta){
-        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must specify either a list of IPs or timestamp. Please try again!");
-        return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
-    }
+	/* Build filter list (if any) */
+	jsonFilters = json_array();
+	if (filters){
+		for (i = 0; i < filters->maxEntryNumber; i++){
+			if (filters->entry[i][0]){
+				json_array_append_new(jsonFilters, json_string(filters->entry[i]));
+			}
+		}
+		if (json_array_size(jsonFilters) == 0){
+			deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more output filters in a list. Please try again!");
+			return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
+		}
+	}
 
-    /* Build IP INFO json request */
+    jsonObj = json_pack("{ssss}",
+                        "api_key", api_key,
+                        "ip", ip);
 
-    if (ipList){
-        
-        /* Build ip list JSON array (if any) */
-        jsonIPs = json_array();
-        for (i = 0; i < ipList->maxEntryNumber; i++){
-            if (ipList->entry[i][0]){
-                json_array_append_new(jsonIPs, json_string(ipList->entry[i]));
-            }
-        }
-
-        if (json_array_size(jsonIPs) == 0){
-            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more IPs. Please try again!");
-            return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
-        }
-
-        jsonObj = json_pack("{ssssso}",
-                            "api_key", api_key,
-                            "history", (history == deepviz_true ? "true" : "false"),
-                            "ip", jsonIPs);
-    }
-    else if (time_delta){
-    
-        jsonObj = json_pack("{ssssss}",
-                            "api_key", api_key,
-                            "history", (history == deepviz_true ? "true" : "false"),
-                            "time_delta", time_delta);
-
-    }
+	if (json_array_size(jsonFilters)){
+		/* Filters provided, add to request */
+		json_object_set_new(jsonObj, "output_filters", jsonFilters);
+	}
 
     /* Dump JSON string */
     jsonRequestString = json_dumps(jsonObj, 0);
@@ -308,25 +294,22 @@ EXPORT PDEEPVIZ_RESULT deepviz_ip_info(const char* api_key,
 }
 
 
-EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
-                                            PDEEPVIZ_LIST domain, 
-                                            const char* time_delta, 
-                                            deepviz_bool history, 
+EXPORT PDEEPVIZ_RESULT deepviz_domain_info( const char* api_key,
+                                            const char* domain, 
                                             PDEEPVIZ_LIST filters){
 
     PDEEPVIZ_RESULT	result = NULL;
-    void*			responseOut = NULL;
-    size_t			responseOutLen = 0;
-    json_t			*jsonObj = NULL;
-    json_t			*jsonDomains = NULL;
-    json_t			*jsonFilters = NULL;
-    char			*jsonRequestString = NULL;
-    char			*retMsg = NULL;
-    deepviz_bool	bRet = deepviz_false;
-    size_t			i;
-    char			statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
+    void*           responseOut = NULL;
+    size_t          responseOutLen = 0;
+    json_t          *jsonObj = NULL;
+    json_t          *jsonFilters = NULL;
+    char            *jsonRequestString = NULL;
+    char            *retMsg = NULL;
+    deepviz_bool    bRet = deepviz_false;
+    size_t          i;
+    char            statusCode[DEEPVIZ_STATUS_CODE_MAX_LEN] = { 0 };
 #ifdef _WIN32
-    char			HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
+    char            HTTPheader[DEEPVIZ_HTTP_HEADER_MAX_LEN] = { 0 };
 #endif
 
     retMsg = (char*)malloc(DEEPVIZ_ERROR_MAX_LEN);
@@ -340,17 +323,12 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
     return deepviz_result_init(DEEPVIZ_STATUS_INTERNAL_ERROR, retMsg);
 #endif
 
-    if (!api_key || (!domain && !time_delta)){
+    if (!api_key || !domain ){
         deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "Invalid or missing parameters. Please try again!");
         return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
     }
 
-    if (domain && time_delta){
-        deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must specify either a list of domains or timestamp. Please try again!");
-        return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
-    }
-
-    /* Build IP INFO json request */
+    /* Build DOMAIN INFO json request */
 
     /* Build filter list (if any) */
     jsonFilters = json_array();
@@ -365,37 +343,10 @@ EXPORT PDEEPVIZ_RESULT deepviz_domain_info(const char* api_key,
             return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
         }
     }
-
-    if (domain){
-        /* Domains provided */
-
-        /* Build domain list JSON array (if any) */
-        jsonDomains = json_array();
-        for (i = 0; i < domain->maxEntryNumber; i++){
-            if (domain->entry[i][0]){
-                json_array_append_new(jsonDomains, json_string(domain->entry[i]));
-            }
-        }
-
-        if (json_array_size(jsonDomains) == 0){
-            deepviz_sprintf(retMsg, DEEPVIZ_ERROR_MAX_LEN, "You must provide one or more domains. Please try again!");
-            return deepviz_result_init(DEEPVIZ_STATUS_INPUT_ERROR, retMsg);
-        }
-
-        jsonObj = json_pack("{ssssso}",
-                            "api_key", api_key,
-                            "history", (history == deepviz_true ? "true" : "false"),
-                            "domain", jsonDomains);
-    }
-    else if (time_delta){
-        /* time delta provided */
-
-        jsonObj = json_pack("{ssssss}",
-                            "api_key", api_key,
-                            "history", (history == deepviz_true ? "true" : "false"),
-                            "time_delta", time_delta);
-
-    }
+	
+    jsonObj = json_pack("{ssss}",
+                        "api_key", api_key,
+                        "domain", domain);
 
     if (json_array_size(jsonFilters)){
         /* Filters provided, add to request */

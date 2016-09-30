@@ -10,9 +10,9 @@
 
 /* ******************** c-deepviz version ******************** */
 
-#define		C_DEEPVIZ_VERSION           "1.1.0"
-#define		C_DEEPVIZ_MAJOR_VERSION     1
-#define		C_DEEPVIZ_MINOR_VERSION     1
+#define		C_DEEPVIZ_VERSION           "2.0.0"
+#define		C_DEEPVIZ_MAJOR_VERSION     2
+#define		C_DEEPVIZ_MINOR_VERSION     0
 #define		C_DEEPVIZ_PATCH_VERSION     0
 
 
@@ -157,23 +157,16 @@ EXPORT PDEEPVIZ_RESULT  deepviz_sample_info(
 	const char* api_key,
 	PDEEPVIZ_LIST filters);
 
-/* Retrieve intel data about one or more IPs
-OR
-   Retrieve the list of IPs analyzed in the last "time_delta" */
-EXPORT PDEEPVIZ_RESULT	deepviz_ip_info(
-    const char* api_key, 
-    PDEEPVIZ_LIST ipList, 
-    const char* time_delta, 
-    deepviz_bool history);
+/* Retrieve intel data about one IP */
+EXPORT PDEEPVIZ_RESULT deepviz_ip_info(
+	const char* api_key,
+	const char* ip,
+	PDEEPVIZ_LIST filters);
 
-/* Retrieve intel data about one or more domains 
-OR
-   Retrieve newly registered domains in the last "time_delta" */
+/* Retrieve intel data about one domain */
 EXPORT PDEEPVIZ_RESULT	deepviz_domain_info(
     const char* api_key, 
-    PDEEPVIZ_LIST domain, 
-    const char* time_delta, 
-    deepviz_bool history,
+	const char* domain,
     PDEEPVIZ_LIST filters);
 
 /* Run generic search based on strings (find all IPs, domains, samples related to the searched keyword) */

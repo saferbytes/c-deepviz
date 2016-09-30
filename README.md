@@ -242,78 +242,31 @@ if (filters){
 }
 ```
 
-To retrieve intel data about one or more IPs:
+To retrieve intel data about one IP:
 
 ```C++
 #include "c-deepviz.h"
 
 ...
 PDEEPVIZ_RESULT result = NULL;
-PDEEPVIZ_LIST    ipList = NULL;
 const char* apikey = "--------------------------your-apikey---------------------------";
+const char* ip = "x.x.x.x";
 
-ipList = deepviz_list_init(<number_of_IPs>);
-if (ipList){
-
-    deepviz_list_add(ipList, "<ip_address_1");
-    ...
-    deepviz_list_add(ipList, "<ip_address_n");
-
-    result = deepviz_ip_info(apikey, ipList, NULL, <deepviz_false/deepviz_true>);
-    if (result){
-        if (result->status == DEEPVIZ_STATUS_SUCCESS){
-            printf("JSON RESULT: %s\n", result->msg);
-        }
-        else{
-            printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
-        }
+result = deepviz_ip_info(apikey, ip, NULL);      // filters are optional
+if (result){
+    if (result->status == DEEPVIZ_STATUS_SUCCESS){
+        printf("JSON RESULT: %s\n", result->msg);
     }
-
-    deepviz_list_free(ipList);
-    deepviz_result_free(result);
+    else{
+        printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
+    }
 }
+
+deepviz_result_free(result);
+
 ```
 
-To retrieve intel data about one or more domains:
-
-```C++
-#include "c-deepviz.h"
-
-...
-PDEEPVIZ_RESULT result = NULL;
-PDEEPVIZ_LIST    domainList = NULL;
-PDEEPVIZ_LIST    filters = NULL;
-const char* apikey = "--------------------------your-apikey---------------------------";
-
-domainList = deepviz_list_init(<number_of_domains>);
-filters = deepviz_list_init(<number_of_domain_filters>);
-if (domainList && filters){
-
-    deepviz_list_add(domainList, "<domain_1>");
-    ...
-    deepviz_list_add(domainList, "<domain_n>");
-
-    deepviz_list_add(filters, "<domain_filter_1>");    
-    ...
-    deepviz_list_add(filters, "<domain_filter_n>");
-
-    result = deepviz_domain_info(apikey, domainList, NULL, <deepviz_false/deepviz_true>, filters);
-    if (result){
-        if (result->status == DEEPVIZ_STATUS_SUCCESS){
-            printf("JSON RESULT: %s\n", result->msg);
-        }
-        else{
-            printf("ERROR CODE: %d - MSG: %s\n", result->status, result->msg);
-        }
-    }
-
-    deepviz_list_free(domainList);
-    deepviz_list_free(filters);
-    deepviz_result_free(result);
-}
-```
-
-To retrieve newly registered domains in the last 7 days:
+To retrieve intel data about one domain:
 
 ```C++
 #include "c-deepviz.h"
@@ -322,7 +275,7 @@ To retrieve newly registered domains in the last 7 days:
 PDEEPVIZ_RESULT result = NULL;
 PDEEPVIZ_LIST    filters = NULL;
 const char* apikey = "--------------------------your-apikey---------------------------";
-const char* timeDelta = "7d";
+const char* domain = "---your-domain---";
 
 filters = deepviz_list_init(<number_of_domain_filters>);
 if (filters){
@@ -331,7 +284,7 @@ if (filters){
     ...
     deepviz_list_add(filters, "<domain_filter_n>");
 
-    result = deepviz_domain_info(apikey, NULL, timeDelta, <deepviz_false/deepviz_true>, filters);
+    result = deepviz_domain_info(apikey, domain, filters);  // filters are optional
     if (result){
         if (result->status == DEEPVIZ_STATUS_SUCCESS){
             printf("JSON RESULT: %s\n", result->msg);
@@ -356,7 +309,7 @@ To run generic search based on strings
 PDEEPVIZ_RESULT result = NULL;
 PDEEPVIZ_LIST    filters = NULL;
 const char* apikey = "--------------------------your-apikey---------------------------";
-const char* searchString = "<your_keyword>";
+const char* searchString = "--your_keyword---";
 int result_set_start = 0;
 int result_set_number_of_element = 100;
 
